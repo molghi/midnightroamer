@@ -1,0 +1,71 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap");
+
+@import url("https://db.onlinewebfonts.com/c/30a71dcf9a1c39558ca4e97c92a4b2fa?family=Noe+Display+Bold");
+
+// ================================================================================================
+
+// if you're using font files locally...
+
+// each font file should have this:
+
+@font-face {
+    font-family: "Larsseit-Regular";
+    src: local("Larsseit-Regular"), url("/src/assets/fonts/Larsseit-Regular.woff2") format("woff2"),
+        url("/src/assets/fonts/Larsseit-Regular.woff") format("woff");
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+}
+
+%Larsseit-Regular {
+    font-family: "Larsseit-Regular", sans-serif;
+    font-weight: 400;
+} // @extend %fontname;  to use
+
+// ================================================================================================
+
+@font-face {
+    font-family: "Larsseit-Light";
+    src: local("Larsseit-Light"), url("/src/assets/fonts/Larsseit-Light.woff2") format("woff2"),
+        url("/src/assets/fonts/Larsseit-Light.woff") format("woff");
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+}
+
+%Larsseit-Light {
+    font-family: "Larsseit-Light", sans-serif;
+    font-weight: 300;
+}
+
+// ================================================================================================
+
+@font-face {
+    font-family: "Larsseit-Bold";
+    src: local("Larsseit-Bold"), url("/src/assets/fonts/Larsseit-Bold.woff2") format("woff2"),
+        url("/src/assets/fonts/Larsseit-Bold.woff") format("woff");
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+}
+
+%Larsseit-Bold {
+    font-family: "Larsseit-Bold", sans-serif;
+    font-weight: 700;
+}
+
+// ================================================================================================
+
+@font-face {
+    font-family: "Larsseit-ExtraBold";
+    src: local("Larsseit-ExtraBold"), url("/src/assets/fonts/Larsseit-ExtraBold.woff2") format("woff2"),
+        url("/src/assets/fonts/Larsseit-ExtraBold.woff") format("woff");
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+}
+
+%Larsseit-ExtraBold {
+    font-family: "Larsseit-ExtraBold", sans-serif;
+    font-weight: 900;
+}

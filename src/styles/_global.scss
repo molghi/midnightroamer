@@ -1,0 +1,166 @@
+html,
+body {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: #011627;
+    color: #fff;
+}
+
+.wrapper {
+    width: 100%;
+    min-height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.main {
+    flex: 1 0 auto;
+}
+
+.footer {
+    flex: 0 0 auto;
+}
+
+// ================================================================================================
+
+.container {
+    max-width: #{$mw};
+    margin: 0 auto;
+    width: 100%;
+
+    @media (max-width: #{$md1}) {
+        max-width: 970px;
+    }
+
+    @media (max-width: #{$md2}) {
+        max-width: 750px;
+    }
+
+    @media (max-width: #{$md3}) {
+        max-width: none;
+        padding: 0 10px;
+    }
+}
+
+//=====================================================================================
+
+@mixin hover-underline {
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+@mixin hover-opacity {
+    transition: 0.3s ease 0s;
+
+    &:hover {
+        opacity: 0.7;
+    }
+}
+
+@mixin flex3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+//=====================================================================================
+
+.section-title {
+    font-family: "Noe Display Bold";
+    font-weight: 700;
+    font-size: 72px;
+    letter-spacing: -0.02em;
+}
+
+// ================================================================================================
+
+.button {
+    display: inline-block;
+    font-family: inherit;
+    transition: 0.3s ease 0s;
+    padding: 20px 58px;
+    background-color: $skyblue;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    border-radius: 48px;
+    &:hover {
+        background-color: #00a8ba;
+    }
+    position: relative;
+    // &:after {
+    //     content: "";
+    //     position: absolute;
+    //     top: 26px;
+    //     right: -15px;
+    //     background-color: #fff;
+    //     width: 30px;
+    //     height: 2px;
+    //     border-radius: 16px;
+    // }
+    @media (max-width: #{$md4}) {
+        padding: 12px 30px;
+        font-size: 14px;
+        // &:after {
+        // top: 18px;
+        // }
+    }
+}
+
+// ================================================================================================
+
+input,
+textarea {
+    &::placeholder {
+        font-family: inherit;
+        font-size: inherit;
+        color: inherit;
+    }
+
+    &:focus::placeholder {
+        color: transparent;
+    }
+}
+
+input,
+textarea {
+    display: block;
+    width: 100%;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+}
+
+textarea {
+    resize: none;
+}
+
+select {
+    background-color: #fff;
+    appearance: none;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+}
+
+// ================================================================================================
+
+.logo {
+    transition: all 0.3s;
+    font-family: "Noe Display";
+    font-size: 40px;
+    letter-spacing: 2px;
+
+    span {
+        color: $skyblue;
+    }
+
+    &:hover {
+        opacity: 0.6;
+    }
+}

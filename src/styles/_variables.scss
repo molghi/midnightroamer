@@ -1,0 +1,19 @@
+$mainfont: "Larsseit-Bold", "Helvetica Neue", Helvetica, Arial, sans-serif; // the most common font,  linked with _reset.scss
+$mainfontcolor: #000; // the most common font color
+$mainfontsize: 16px; // the most common font size
+
+$skyblue: #00c9e0;
+$skyblue2: #41ead4;
+
+// ================================================================================================
+
+//  RESPONSIVE DESIGN
+
+$minwidth: 320px;
+
+$mw: 1400px;
+
+$md1: calc(#{$mw} + 12px);
+$md2: 992.98px;
+$md3: 767.98px;
+$md4: 479.98px;
