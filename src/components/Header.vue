@@ -29,12 +29,16 @@ const toggleMenu = () => {
     isMenuActive.value = !isMenuActive.value;
 };
 
+const hideMenu = () => {
+    isMenuActive.value = false;
+    isSearchActive.value = false;
+};
+
 // Function to run when click is outside
 function handleClickOutside(event) {
     if (targetRef.value && !targetRef.value.contains(event.target)) {
         // Do when clicked outside the element
-        isMenuActive.value = false;
-        isSearchActive.value = false;
+        hideMenu();
     }
 }
 
@@ -80,7 +84,12 @@ onBeforeUnmount(() => document.removeEventListener("click", handleClickOutside))
                         <button class="header__button button" @click="toggleMenu">{{ content.menuTitle }}</button>
                         <nav :class="`header__menu ${isMenuActive ? 'active' : ''}`">
                             <ul class="header__list">
-                                <li v-for="(item, index) in content.menuItems" :key="index" class="header__list-item">
+                                <li
+                                    v-for="(item, index) in content.menuItems"
+                                    :key="index"
+                                    class="header__list-item"
+                                    @click="hideMenu"
+                                >
                                     <a :href="item.link" class="header__link">{{ item.title }}</a>
                                 </li>
                             </ul>
@@ -98,6 +107,7 @@ onBeforeUnmount(() => document.removeEventListener("click", handleClickOutside))
     top: 0;
     left: 0;
     width: 100%;
+    z-index: 100;
     padding: 50px 0;
 
     @media (max-width: #{$md4}) {
@@ -121,7 +131,7 @@ onBeforeUnmount(() => document.removeEventListener("click", handleClickOutside))
     &__search {
         display: flex;
         @media (max-width: #{$md3}) {
-            position: relative;
+            // position: relative;
         }
     }
 
@@ -140,15 +150,19 @@ onBeforeUnmount(() => document.removeEventListener("click", handleClickOutside))
         margin-left: 15px;
         @media (max-width: #{$md3}) {
             position: absolute;
-            top: 300%;
-            right: -200px;
-        }
-        @media (max-width: #{$md4}) {
-            top: 250%;
-            right: -132px;
+            // top: 300%;
+            top: 130px;
+            // right: -200px;
+            min-width: 300px;
+            right: 10px;
         }
         @media (max-height: 650px) {
             top: 230%;
+        }
+        @media (max-width: #{$md4}) {
+            // top: 250%;
+            top: 80px;
+            // right: -132px;
         }
     }
 
@@ -178,6 +192,7 @@ onBeforeUnmount(() => document.removeEventListener("click", handleClickOutside))
             visibility: hidden;
             transform: translateY(-30px);
             &.active {
+                width: 100%;
                 opacity: 1;
                 visibility: visible;
                 transform: translateY(0);
