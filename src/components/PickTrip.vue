@@ -1,7 +1,27 @@
 <script setup>
+import { ref, watch, nextTick } from "vue";
+import twiImg from "@/assets/images/icons/twi.svg";
+import igImg from "@/assets/images/icons/ig.svg";
+import fbImg from "@/assets/images/icons/fb.svg";
+
+import image1 from "@/assets/images/content/pick-1.jpg";
+import image2 from "@/assets/images/content/pick-2.jpg";
+import image3 from "@/assets/images/content/pick-3.jpg";
+import image4 from "@/assets/images/content/pick-4.jpg";
+import image5 from "@/assets/images/content/pick-5.jpg";
+import image6 from "@/assets/images/content/pick-6.jpg";
+import image7 from "@/assets/images/content/pick-7.jpg";
+import image8 from "@/assets/images/content/pick-8.jpg";
+
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { Autoplay, Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+
 const content = {
     title: "<span>P</span>ick <span>Y</span>our <span>T</span>rip",
-    subtitle: "Our team put together some trips to you to discover, feel free to discover each of them.",
+    subtitle: "Our team has put together great trips for you to discover!",
+    shareBlockText: "SHARE IT:",
     triggers: [
         { title: "Chill Adventure", href: "#chill" },
         { title: "Spooky Times", href: "#spooky" },
@@ -14,7 +34,100 @@ const content = {
         { id: "desert", title: "" },
         { id: "wild", title: "" },
     ],
+    socials: [
+        { link: "/", icon: twiImg },
+        { link: "/", icon: igImg },
+        { link: "/", icon: fbImg },
+    ],
+    tabContents: [
+        {
+            slidesViews: [
+                { title: "Grand Dunes Landscape", image: image1 },
+                { title: "Beautiful Oasis", image: image2 },
+            ],
+            body: {
+                title: "<span>C</span>hill <span>A</span>dventure",
+                texts: [
+                    "Laid-back nights. Easy trails. Deep vibes. Slow it down and breathe it in. Chill Adventure is for those who roam without rushing—where twilight trails, quiet shores, and low-key campfires create space to reset.",
+                    "No pressure, no pace. Just open skies, ambient stops, and the kind of moments that feel unplanned but stay unforgettable.",
+                    "Perfect for solo thinkers, mellow crews, or anyone chasing calm beyond the city glow.",
+                ],
+                buttonTitle: "SEE OUR LATEST OFFER",
+            },
+        },
+        {
+            slidesViews: [
+                { title: "Haunted Trails & Twilight Skies", image: image3 },
+                { title: "Ghostly Paths Through Foggy Pines", image: image6 },
+            ],
+            body: {
+                title: "<span>S</span>pooky <span>T</span>imes",
+                texts: [
+                    "Night falls. Shadows stretch. Nerves tingle. For those who lean into the eerie. Spooky Times blends mystery with thrill—midnight ruins, foggy forests, strange tales by firelight.",
+                    "Expect ghost lore, creaking paths, and a sense that you're not entirely alone. Low lights, high tension. Come if you dare.",
+                ],
+                buttonTitle: "BOOK NOW",
+            },
+        },
+        {
+            slidesViews: [
+                { title: "A Vivid Sunset Like Melted Iron", image: image4 },
+                { title: "Gold Sands At Night", image: image5 },
+            ],
+            body: {
+                title: "<span>D</span>esert <span>M</span>adness",
+                texts: [
+                    "Heat lingers. Silence hums. The surreal unfolds. This one’s all about extremes—red sands under moonlight, echoing canyons, and stillness so deep it roars.",
+                    "Desert Madness is the mind-bending, mirage-chasing escape for the wild at heart. Stare into stars that never blink, ride winds that whisper strange truths, and find clarity in the chaos.",
+                ],
+                buttonTitle: "SEE OUR LATEST OFFER",
+            },
+        },
+        {
+            slidesViews: [
+                { title: "Raw Earth & Untamed Forest", image: image7 },
+                { title: "Wilderness Echoes for the Brave", image: image8 },
+            ],
+            body: {
+                title: "<span>O</span>ut in the <span>W</span>ild",
+                texts: [
+                    "No fences. No filters. Just raw, remote earth. Out in the Wild strips it all back. Rugged trails, real terrain, and nights where your only ceiling is the sky.",
+                    "It’s not curated—it’s carved. For the restless soul who feels most alive off-grid, under pine, or across peaks where signal dies and senses wake up.",
+                ],
+                buttonTitle: "BOOK NOW",
+            },
+        },
+    ],
 };
+
+const activeTabTrigger = ref(0);
+const mySwiper = ref(null);
+const mySwipers = ref({});
+
+// re-initialize Swiper’s navigation module
+// watch(activeTabTrigger, async () => {
+//     await nextTick();
+//     if (mySwiper.value && mySwiper.value.swiper) {
+//         const swiperInstance = mySwiper.value.swiper;
+//         swiperInstance.navigation.destroy();
+//         swiperInstance.navigation.init();
+//         swiperInstance.navigation.update();
+//     }
+// });
+
+watch(
+    () => activeTabTrigger,
+    () => {
+        nextTick(() => {
+            const swiper = mySwiper.value.swiper;
+            swiper.update();
+            swiper.navigation.init();
+            swiper.navigation.update();
+        });
+    }
+);
+
+const toggleTabTrigger = (tabIndex) => (activeTabTrigger.value = tabIndex);
 </script>
 
 <template>
@@ -23,251 +136,94 @@ const content = {
             <div class="pick__wrapper">
                 <div class="pick__top">
                     <div class="section-title pick__title" v-html="content.title"></div>
-                    <div class="pick__subtitle">
-                        {{ content.subtitle }}
-                    </div>
+                    <div class="pick__subtitle" v-html="content.subtitle"></div>
                 </div>
+
                 <div class="pick__bottom">
+                    <!-- RENDER TAB TRIGGERS -->
                     <div class="pick__triggers">
-                        <a
+                        <button
                             v-for="(item, index) in content.triggers"
                             :key="index"
-                            :href="item.href"
-                            :class="`pick__trigger ${index === 0 ? 'active' : ''}`"
-                            >{{ item.title }}</a
+                            :class="`pick__trigger ${index === activeTabTrigger ? 'active' : ''}`"
+                            @click="() => toggleTabTrigger(index)"
                         >
+                            {{ item.title }}
+                        </button>
                     </div>
                     <div class="pick__contents">
-                        <div class="pick__content active" id="chill">
+                        <!-- RENDER TABS -->
+                        <div
+                            v-for="(tabItem, myIndex) in content.tabContents"
+                            :key="myIndex"
+                            v-show="myIndex === activeTabTrigger"
+                            class="pick__content"
+                        >
                             <div class="pick__content-pic">
-                                <div class="swiper-wrapper">
-                                    <div>
+                                <!-- RENDER SLIDES -->
+                                <!-- SWIPER :autoplay="{ delay: 3000, disableOnInteraction: false }" -->
+                                <swiper
+                                    ref="mySwiper"
+                                    :modules="[Autoplay, Navigation]"
+                                    :slides-per-view="1"
+                                    :loop="true"
+                                    :navigation="{
+                                        nextEl: '.swiper-button-next',
+                                        prevEl: '.swiper-button-prev',
+                                    }"
+                                    class="mySwiper"
+                                >
+                                    <swiper-slide v-for="(item, indexx) in tabItem.slidesViews" :key="indexx">
                                         <div class="pick__content-slide">
                                             <div class="pick__content-slide-text">
-                                                <span>02.</span>
-                                                BEAUTIFUL OASIS
+                                                <span>0{{ indexx + 1 }}.</span>
+                                                {{ item.title.toUpperCase() }}
                                             </div>
                                             <div class="pick__content-slide-pic">
-                                                <img src="images/content/pick-2.jpg" alt="" />
+                                                <img :src="item.image" alt="trip image" />
                                             </div>
                                         </div>
+                                    </swiper-slide>
+                                    <!-- SWIPER CUSTOM NAVIGATION ARROWS -->
+                                    <div class="custom-nav">
+                                        <div class="swiper-button-prev"></div>
+                                        <div class="swiper-button-next"></div>
                                     </div>
-                                    <div
-                                        class="swiper-slide swiper-slide-duplicate-active"
-                                        data-swiper-slide-index="0"
-                                        role="group"
-                                        aria-label="1 / 2"
-                                        style="width: 490px; margin-right: 110px"
-                                    >
-                                        <div class="pick__content-slide">
-                                            <div class="pick__content-slide-text">
-                                                <span>01.</span>
-                                                GRAND DUNES LANDSCAPE
-                                            </div>
-                                            <div class="pick__content-slide-pic">
-                                                <img src="images/content/pick-1.jpg" alt="" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="swiper-slide swiper-slide-prev swiper-slide-duplicate-next"
-                                        data-swiper-slide-index="1"
-                                        role="group"
-                                        aria-label="2 / 2"
-                                        style="width: 490px; margin-right: 110px"
-                                    >
-                                        <div class="pick__content-slide">
-                                            <div class="pick__content-slide-text">
-                                                <span>02.</span>
-                                                BEAUTIFUL OASIS
-                                            </div>
-                                            <div class="pick__content-slide-pic">
-                                                <img src="images/content/pick-2.jpg" alt="" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="swiper-slide swiper-slide-duplicate swiper-slide-active"
-                                        data-swiper-slide-index="0"
-                                        role="group"
-                                        aria-label="1 / 2"
-                                        style="width: 490px; margin-right: 110px"
-                                    >
-                                        <div class="pick__content-slide">
-                                            <div class="pick__content-slide-text">
-                                                <span>01.</span>
-                                                GRAND DUNES LANDSCAPE
-                                            </div>
-                                            <div class="pick__content-slide-pic">
-                                                <img src="images/content/pick-1.jpg" alt="" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="swiper-button-prev"
-                                    tabindex="0"
-                                    role="button"
-                                    aria-label="Previous slide"
-                                    aria-controls="swiper-wrapper-10602b1079631987b2"
-                                ></div>
-                                <div
-                                    class="swiper-button-next"
-                                    tabindex="0"
-                                    role="button"
-                                    aria-label="Next slide"
-                                    aria-controls="swiper-wrapper-10602b1079631987b2"
-                                ></div>
-                                <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                                </swiper>
                             </div>
                             <div class="pick__content-body">
                                 <div class="pick__content-body-inner">
-                                    <div class="pick__content-title">Chill Adventure</div>
+                                    <div class="pick__content-title" v-html="tabItem.body.title"></div>
                                     <div class="pick__content-text">
-                                        <p>
-                                            Ornare vivamus molestie pellentesque nunc. Sed sapien erat ultrices curabitur. Erat id
-                                            fringilla arcu condimentum fames.
-                                        </p>
-                                        <p>
-                                            Aliquet dictum aliquet faucibus cursus turpis. Suspendisse cum rutrum sit ut sociis.
-                                            Pellentesque neque orci adipiscing pharetra lacus, dignissim pharetra ipsum blandit.
-                                            Feugiat quis quam consectetur lectus id quis tortor vel, mattis.
+                                        <!-- RENDER TEXTS -->
+                                        <p
+                                            v-for="(itemSocial, indexSocial) in tabItem.body.texts"
+                                            :key="indexSocial"
+                                            :style="`${
+                                                indexSocial === 0
+                                                    ? `font-family: 'Larsseit-Bold', sans-serif;`
+                                                    : `font-family: 'Larsseit-Regular', sans-serif;`
+                                            }`"
+                                        >
+                                            {{ itemSocial }}
                                         </p>
                                     </div>
-                                    <a href="#" class="button pick__content-button">SEE OUR LATEST OFFER</a>
+                                    <a href="/" class="button pick__content-button">{{ tabItem.body.buttonTitle }}</a>
                                 </div>
                                 <div class="pick__content-share">
-                                    <div class="pick__content-share-text">SHARE IT:</div>
+                                    <div class="pick__content-share-text">{{ content.shareBlockText }}</div>
                                     <div class="pick__content-share-icons">
-                                        <a href="#" class="pick__content-share-icon">
-                                            <img src="images/icons/ig.svg" alt="" />
-                                        </a>
-                                        <a href="#" class="pick__content-share-icon">
-                                            <img src="images/icons/fb.svg" alt="" />
-                                        </a>
-                                        <a href="#" class="pick__content-share-icon">
-                                            <img src="images/icons/twi.svg" alt="" />
+                                        <!-- RENDER SOCIALS -->
+                                        <a
+                                            v-for="(itemSocial2, indexSocial2) in content.socials"
+                                            :key="indexSocial2"
+                                            :href="itemSocial2.link"
+                                            class="pick__content-share-icon"
+                                        >
+                                            <img :src="itemSocial2.icon" alt="socials icon" />
                                         </a>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- -->
-                        <div class="pick__content" id="spooky">
-                            <div class="pick__content-text">
-                                <p>
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore officia assumenda impedit
-                                    dicta facilis rerum, laudantium quibusdam harum ullam laboriosam ipsa ducimus soluta,
-                                    asperiores doloribus rem atque odio non distinctio, vero dolores incidunt quaerat ratione
-                                    doloremque. Iste, delectus? Quos animi, soluta nam officia quaerat iste optio veritatis
-                                    aspernatur praesentium sunt beatae, repudiandae nulla, eum iusto tempore dolore.
-                                </p>
-                                <p>
-                                    Vel accusamus quaerat eligendi quae iste quos, ducimus commodi iusto optio. Non, repellat
-                                    debitis aperiam quis excepturi nostrum quod delectus expedita culpa quam obcaecati amet beatae
-                                    facere adipisci quasi sed? Amet doloribus quas corrupti! Enim consequatur consequuntur quos
-                                    consectetur quis inventore eius ratione!
-                                </p>
-                                <p>
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore officia assumenda impedit
-                                    dicta facilis rerum, laudantium quibusdam harum ullam laboriosam ipsa ducimus soluta,
-                                    asperiores doloribus rem atque odio non distinctio, vero dolores incidunt quaerat ratione
-                                    doloremque. Iste, delectus? Quos animi, soluta nam officia quaerat iste optio veritatis
-                                    aspernatur praesentium sunt beatae, repudiandae nulla, eum iusto tempore dolore.
-                                </p>
-                                <p>
-                                    Vel accusamus quaerat eligendi quae iste quos, ducimus commodi iusto optio. Non, repellat
-                                    debitis aperiam quis excepturi nostrum quod delectus expedita culpa quam obcaecati amet beatae
-                                    facere adipisci quasi sed? Amet doloribus quas corrupti! Enim consequatur consequuntur quos
-                                    consectetur quis inventore eius ratione!
-                                </p>
-                                <p>
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore officia assumenda impedit
-                                    dicta facilis rerum, laudantium quibusdam harum ullam laboriosam ipsa ducimus soluta,
-                                    asperiores doloribus rem atque odio non distinctio, vero dolores incidunt quaerat ratione
-                                    doloremque. Iste, delectus? Quos animi, soluta nam officia quaerat iste optio veritatis
-                                    aspernatur praesentium sunt beatae, repudiandae nulla, eum iusto tempore dolore.
-                                </p>
-                                <p>
-                                    Vel accusamus quaerat eligendi quae iste quos, ducimus commodi iusto optio. Non, repellat
-                                    debitis aperiam quis excepturi nostrum quod delectus expedita culpa quam obcaecati amet beatae
-                                    facere adipisci quasi sed? Amet doloribus quas corrupti! Enim consequatur consequuntur quos
-                                    consectetur quis inventore eius ratione!
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- -->
-                        <div class="pick__content" id="desert">
-                            <div class="pick__content-text">
-                                <p>
-                                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Obcaecati quasi, totam omnis
-                                    cupiditate, deserunt cumque natus autem tempora nam aliquid repudiandae eligendi
-                                    exercitationem officiis corrupti magni maiores animi?
-                                </p>
-                                <p>
-                                    Neque architecto temporibus nisi magnam quam obcaecati! Consectetur nemo cumque reprehenderit,
-                                    laudantium modi illo soluta amet delectus magni, rerum laborum dolorum deserunt placeat,
-                                    minima quisquam. Vitae aliquam totam molestiae ducimus illum enim est dolores nobis quis
-                                    similique repellendus adipisci, esse, voluptatem nisi consequuntur sequi voluptas soluta, et
-                                    ea incidunt temporibus! Corrupti, dolorem illum? Est illo voluptas aperiam consequuntur quidem
-                                    consequatur repudiandae eius amet alias fuga deserunt vero aliquid, soluta nihil, voluptatum
-                                    veritatis natus odio voluptate, impedit cupiditate quis.
-                                </p>
-                                <p>
-                                    Excepturi voluptates, illum nesciunt blanditiis accusantium at iste. Facere nisi magni quos
-                                    assumenda itaque, in libero, culpa laborum est molestias mollitia, soluta nam odio quis non
-                                    minima earum odit? Voluptas, iusto dolor vitae veritatis temporibus blanditiis dolorem
-                                    consequuntur suscipit eos explicabo debitis fugiat perferendis cum facere. Cum recusandae
-                                    quibusdam harum quod sit ex iure laboriosam totam. Recusandae nulla possimus perferendis
-                                    labore id incidunt, sint voluptatem illum explicabo inventore eius perspiciatis dolorem velit
-                                    maiores neque quidem sed dolor, debitis, rerum quibusdam!
-                                </p>
-                                <p>
-                                    Sit at doloribus eligendi impedit qui quos officiis iure labore quod hic! Doloribus, voluptas.
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- -->
-                        <div class="pick__content" id="wild">
-                            <div class="pick__content-text">
-                                <p>
-                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quod at praesentium, rerum qui
-                                    voluptates voluptas id totam similique molestias, quisquam assumenda doloribus expedita labore
-                                    sit dignissimos cumque aspernatur ea temporibus non cum quae. Corrupti nemo libero placeat
-                                    nihil tempore sapiente iusto cupiditate, unde voluptas doloribus quae ipsum obcaecati eum
-                                    architecto, ea eius consequatur molestias enim praesentium.
-                                </p>
-                                <p>
-                                    Autem, iste cum! Minima molestias, aut consequuntur veritatis fugit, dignissimos deleniti
-                                    reprehenderit vel voluptatum rerum harum voluptatem dolorum ut ratione expedita repudiandae
-                                    consectetur natus eos vero minus ipsum temporibus? Asperiores expedita facilis qui
-                                    voluptatibus soluta corrupti velit doloremque possimus quasi, id placeat officia quidem harum
-                                    quaerat amet nostrum obcaecati unde incidunt, et ullam repellendus doloribus reiciendis.
-                                </p>
-                                <p>
-                                    Doloremque corporis deleniti reprehenderit, perspiciatis vero ea earum ducimus debitis
-                                    inventore reiciendis necessitatibus porro amet hic. Dolor praesentium officiis alias nostrum
-                                    nam! Corporis explicabo, maxime laborum rerum suscipit nisi maiores eos magnam sed? Iusto aut
-                                    architecto cupiditate reiciendis ea alias quo nesciunt eligendi eos atque similique,
-                                    reprehenderit expedita modi deserunt laborum doloribus aspernatur numquam quas debitis. Vitae
-                                    distinctio molestiae assumenda velit doloremque unde, ea laboriosam omnis voluptate
-                                    voluptatem. Quos enim commodi ea atque fugiat non in modi quis iusto est deleniti
-                                    necessitatibus aperiam, voluptates numquam dignissimos pariatur aspernatur, quasi praesentium
-                                    perspiciatis reprehenderit? Consectetur delectus voluptatibus enim ipsam nulla assumenda
-                                    molestias quibusdam rem laboriosam ad commodi doloribus earum itaque iure neque facilis, dolor
-                                    voluptate architecto eius, blanditiis debitis illum officiis vitae nisi. Natus tempore, fugit
-                                    neque ratione sit eveniet numquam modi aliquid quos omnis ex.
-                                </p>
-                                <p>
-                                    Explicabo magni pariatur sunt distinctio quibusdam animi ex nesciunt tempore quas nemo
-                                    voluptate assumenda praesentium maiores natus sequi aspernatur deleniti sapiente sed, omnis
-                                    asperiores, beatae reprehenderit odio laudantium consequatur. Optio aut repellat cumque
-                                    maxime, vero eum, rerum cum dolores saepe hic labore esse in autem asperiores cupiditate.
-                                    Dolorem eum vitae adipisci, eligendi obcaecati sapiente.
-                                </p>
                             </div>
                         </div>
                     </div>
@@ -291,7 +247,8 @@ const content = {
         z-index: -1;
         top: -200px;
         left: 0;
-        background: url("../images/content/bg-lights.png") 0 0 no-repeat;
+        background: url("@/assets/images/content/bg-lights.png") 0 0 no-repeat;
+        background-size: cover;
         width: 100%;
         height: 2963px;
     }
@@ -322,7 +279,7 @@ const content = {
             position: absolute;
             top: 23px;
             right: -55px;
-            background: url("../images/icons/x.svg") 0 0 no-repeat;
+            background: url("@/assets/images/icons/x.svg") 0 0 no-repeat;
             width: 24px;
             height: 24px;
         }
@@ -330,14 +287,16 @@ const content = {
             font-size: 54px;
         }
         @media (max-width: #{$md3}) {
-            margin-right: 0;
-            margin-bottom: 30px;
+            // margin-right: 0;
+            // margin-bottom: 30px;
+            margin: 0 auto 30px;
             &:after {
-                top: 60px;
+                top: 40px;
             }
         }
         @media (max-width: #{$md4}) {
-            font-size: 52px;
+            // font-size: 52px;
+            font-size: 47px;
             &:after {
                 display: none;
             }
@@ -346,10 +305,24 @@ const content = {
 
     &__subtitle {
         font-weight: 400;
-        font-size: 16px;
+        font-size: 18px;
         line-height: 150%;
-        letter-spacing: -0.02em;
-        max-width: 350px;
+        // letter-spacing: -0.02em;
+        font-family: "Larsseit-Light", sans-serif;
+        // font-family: "Larsseit-Regular", sans-serif;
+        // max-width: 420px;
+        max-width: 300px;
+        @media (max-width: #{$md2}) {
+            font-size: 16px;
+            line-height: 130%;
+            max-width: 300px;
+        }
+        @media (max-width: #{$md3}) {
+            max-width: 100%;
+            text-align: center;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
     }
 
     &__bottom {
@@ -390,6 +363,8 @@ const content = {
         font-size: 18px;
         letter-spacing: -0.02em;
         color: rgba($color: #fff, $alpha: 0.5);
+        background-color: transparent;
+        // transition: all 0.2s;
         padding-bottom: 33px;
         &.active {
             color: $skyblue2;
@@ -422,10 +397,18 @@ const content = {
     }
 
     &__content {
-        display: none;
-        &.active {
-            display: flex;
+        // display: none;
+        display: flex !important;
+        // &.active,
+        // &[v-cloak],
+        // &[style="display: block"] {
+        //     display: flex;
+        // }
+
+        &[style="display: none;"] {
+            display: none !important;
         }
+
         @media (max-width: #{$md2}) {
             flex-wrap: wrap;
         }
@@ -433,23 +416,37 @@ const content = {
 
     &__content-pic {
         flex: 0 1 580px;
+        max-height: 607px;
+        position: relative;
         // max-width: 486px;
         @media (max-width: 1610px) {
-            margin-left: 95px;
+            // margin-left: 95px;
         }
         @media (max-width: #{$md2}) {
             align-self: center;
             flex: 1 1 100%;
-            margin-bottom: 100px;
+            margin-bottom: 70px;
             // order: 2;
+        }
+        @media (max-width: #{$md3}) {
+            flex: 1 1 100%;
+            margin-left: 0;
+            margin-bottom: 50px;
         }
     }
 
     &__content-slide {
         position: relative;
+        // padding-left: 95px;
+        // padding-bottom: 55px;
+        @media (max-width: #{$md3}) {
+            padding-left: 0;
+            padding-bottom: 0;
+        }
     }
 
     &__content-slide-text {
+        position: relative;
         position: absolute;
         z-index: 1;
         top: 255px;
@@ -459,16 +456,22 @@ const content = {
         font-size: 24px;
         letter-spacing: 0.15em;
         line-height: 150%;
+
         span {
             display: block;
             // @extend %Larsseit-ExtraBold;
             color: $skyblue2;
+            @media (max-width: #{$md3}) {
+                margin-bottom: 10px;
+            }
         }
+
         // @extend %Larsseit-Bold;
         &:after {
             content: "";
             position: absolute;
-            top: -9px;
+            // top: -9px;
+            top: -18px;
             left: 0;
             background: $skyblue2;
             width: 2px;
@@ -478,50 +481,88 @@ const content = {
         &:before {
             content: "";
             position: absolute;
-            top: -9px;
+            // top: -9px;
+            top: -18px;
             left: 0;
             background: $skyblue2;
             width: 172px;
             height: 2px;
             border-radius: 13px;
         }
+
         @media (max-width: #{$md1}) {
             top: 150px;
         }
-        @media (max-width: #{$md4}) {
-            top: 75px;
+        @media (max-width: #{$md3}) {
+            // top: initial;
+            top: 20px;
+            // bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 100%;
+            font-size: 16px;
+            &:before,
+            &:after {
+                display: none;
+            }
         }
     }
 
     &__content-slide-pic {
-        max-width: 486px;
+        // max-width: 486px;
+        padding-left: 95px;
         position: relative;
+        overflow: hidden;
         // z-index: 1;
         &:after {
             content: "";
             position: absolute;
             z-index: -1;
-            bottom: -55px;
-            left: -55px;
-            background: url("../images/icons/dots2.svg") 0 0 no-repeat;
+            // bottom: -55px;
+            // left: -55px;
+            bottom: -56px;
+            left: -19px;
+            background: url("@/assets/images/icons/dots2.svg") 0 0 no-repeat;
             width: 230px;
             height: 230px;
+            @media (max-width: #{$md2}) {
+                // filter: brightness(40%);
+                display: none;
+            }
         }
+
         img {
             border-radius: 8px;
-            max-width: 100%;
+            // max-width: 100%;
             width: 100%;
             height: 607px;
             object-fit: cover;
+            @media (max-width: #{$md2}) {
+                height: 400px;
+            }
+            @media (max-width: #{$md3}) {
+                // height: auto;
+                // max-height: 400px;
+            }
         }
+
         @media (max-width: #{$md2}) {
             max-width: 100%;
         }
-        @media (max-width: #{$md4}) {
-            img {
-                height: 400px;
+        @media (max-width: #{$md3}) {
+            padding-left: 0;
+            &:after {
+                display: none;
             }
         }
+        // @media (max-width: #{$md4}) {
+        //     img {
+        //         height: 400px;
+        //     }
+        // }
     }
 
     &__content-body {
@@ -545,6 +586,9 @@ const content = {
 
     &__content-body-inner {
         max-width: 485px;
+        @media (max-width: #{$md2}) {
+            max-width: 100%;
+        }
     }
 
     &__content-title {
@@ -552,10 +596,11 @@ const content = {
         font-style: normal;
         font-weight: 700;
         font-size: 65px;
-        letter-spacing: -0.02em;
+        // letter-spacing: -0.02em;
         margin-bottom: 55px;
         @media (max-width: #{$md1}) {
-            font-size: 60px;
+            // font-size: 60px;
+            font-size: 52px;
         }
         @media (max-width: #{$md4}) {
             font-size: 45px;
@@ -566,15 +611,22 @@ const content = {
     &__content-text {
         // @extend %Larsseit-Regular;
         font-size: 17px;
-        line-height: 150%;
         letter-spacing: -0.02em;
+
+        p {
+            line-height: 150%;
+        }
+
         p:nth-child(1) {
             // @extend %Larsseit-Bold;
         }
+
         p + p {
             margin-top: 30px;
         }
+
         margin-bottom: 45px;
+
         @media (max-width: #{$md4}) {
             margin-bottom: 30px;
         }
@@ -586,6 +638,11 @@ const content = {
         @media (max-width: #{$md2}) {
             margin-bottom: 30px;
         }
+        @media (max-width: #{$md4}) {
+            display: block;
+            text-align: center;
+            padding: 20px 58px;
+        }
     }
 
     &__content-share {
@@ -595,6 +652,7 @@ const content = {
     &__content-share-text {
         font-size: 15px;
         letter-spacing: 0.15em;
+        font-family: "Larsseit-Light", sans-serif;
         margin-bottom: 25px;
         @media (max-width: #{$md3}) {
             margin-bottom: 15px;
@@ -627,9 +685,13 @@ const content = {
             border-radius: 13px;
         }
         @media (max-width: #{$md3}) {
+            column-gap: 60px;
+
             &:after {
                 left: -12px;
                 bottom: -15px;
+                // width: 175px;
+                width: 195px;
             }
             &:before {
                 right: auto;
@@ -645,5 +707,53 @@ const content = {
             opacity: 0.5;
         }
     }
+}
+
+.mySwiper {
+    max-width: 580px;
+    @media (max-width: #{$md3}) {
+        max-width: 90vw;
+    }
+}
+.swiper {
+    position: relative;
+}
+
+/* Container for both arrows */
+.custom-nav {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    gap: 5px;
+    z-index: 10;
+}
+
+/* Arrow button style */
+.custom-nav .swiper-button-prev,
+.custom-nav .swiper-button-next {
+    all: unset;
+    background-color: black;
+    color: white;
+    padding: 20px 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: auto;
+    font-size: 16px;
+}
+
+.custom-nav .swiper-button-prev:active,
+.custom-nav .swiper-button-next:active {
+    opacity: 0.7;
+}
+</style>
+
+<style>
+.pick__title span,
+.pick__content-title span {
+    color: #41ead4;
 }
 </style>

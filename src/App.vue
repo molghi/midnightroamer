@@ -1,5 +1,4 @@
 <script setup>
-// <PickTrip />
 import Header from "@/components/Header.vue";
 import Hero from "@/components/Hero.vue";
 import PickTrip from "@/components/PickTrip.vue";
@@ -12,6 +11,7 @@ import Footer from "@/components/Footer.vue";
 <template>
     <Header />
     <Hero />
+    <PickTrip />
     <About />
     <Testimonials />
     <Prefooter />

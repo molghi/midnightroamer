@@ -88,6 +88,7 @@ body {
     text-transform: uppercase;
     font-size: 16px;
     letter-spacing: 0.1em;
+    font-family: "Larsseit-Light", sans-serif;
     border-radius: 48px;
     &:hover {
         background-color: #00a8ba;
@@ -163,4 +164,27 @@ select {
     &:hover {
         opacity: 0.6;
     }
+}
+
+// ================================================================================================
+
+/* Webkit-based browsers (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #444;
+    border-radius: 3px;
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #444 #1a1a1a;
 }

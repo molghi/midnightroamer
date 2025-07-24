@@ -21,16 +21,18 @@ const searchRef = ref(null);
 const isMenuActive = ref(false);
 
 const toggleSearch = () => {
+    isMenuActive.value = false; // hide menu
     isSearchActive.value = !isSearchActive.value;
     searchRef.value?.focus();
 };
 
 const toggleMenu = () => {
+    isSearchActive.value = false; // hide search
     isMenuActive.value = !isMenuActive.value;
 };
 
 const hideMenu = () => {
-    isMenuActive.value = false;
+    isMenuActive.value = false; // hide both
     isSearchActive.value = false;
 };
 

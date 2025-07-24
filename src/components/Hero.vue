@@ -7,12 +7,14 @@ import fbImg from "@/assets/images/icons/fb.svg";
 const content = {
     image: heroImg,
     title: "<span>M</span>idnight <span>R</span>oamer",
-    subtitle: "WE GOT TRIPS FOR THE TRIPSTER IN YOU",
-    text: "Neque, eros commodo, nascetur ullamcorper vitae. Tincidunt ut venenatis, volutpat lorem ut faucibus mauris, quisque. Integer gravida sed quis congue. Vel risus, arcu a viverra leo id pulvinar ultricies. Enim in in in pulvinar nulla sollicitudin. Ullamcorper.",
+    subtitle: " Journeys After Dark, For the Ones Who Wander",
+    text: `When the city sleeps, adventure begins. Midnight Roamer curates unforgettable night escapes—urban prowls, forest treks, and starlit retreats designed for curious souls and restless hearts.<br>
+    Step into the shadows, chase the horizon, and roam where few dare.<br>
+    Every trip is a story waiting to unfold. For the tripster in you—this is your hour.`,
     socials: [
-        { icon: twiImg, link: "/" },
-        { icon: igImg, link: "/" },
-        { icon: fbImg, link: "/" },
+        { icon: twiImg, link: "https://twitter.com" },
+        { icon: igImg, link: "https://www.instagram.com" },
+        { icon: fbImg, link: "https://www.facebook.com" },
     ],
 };
 </script>
@@ -24,16 +26,20 @@ const content = {
                 <div class="hero__body">
                     <h1 class="hero__title" v-html="content.title"></h1>
                     <div class="hero__subtitle">{{ content.subtitle }}</div>
-                    <div class="hero__text">
-                        {{ content.text }}
-                    </div>
+                    <div class="hero__text" v-html="content.text"></div>
                 </div>
                 <div class="hero__bottom">
                     <div class="hero__scroll">Scroll</div>
 
                     <!-- SOCIALS -->
                     <div class="hero__social">
-                        <a v-for="(item, index) in content.socials" :key="index" :href="item.link" class="hero__social-link">
+                        <a
+                            v-for="(item, index) in content.socials"
+                            :key="index"
+                            :href="item.link"
+                            class="hero__social-link"
+                            target="_blank"
+                        >
                             <img :src="item.icon" alt="socials image link" />
                         </a>
                     </div>
@@ -122,7 +128,8 @@ const content = {
 
     &__text {
         font-size: 17px;
-        line-height: 150%;
+        // line-height: 150%;
+        line-height: 1.7;
         @media (max-width:  #{$md4}) {
             font-size: 12px;
         }
@@ -142,6 +149,7 @@ const content = {
 
     &__scroll {
         margin-left: 20px;
+        margin-top: 15px;
         // @extend %Larsseit-Bold;
         font-size: 15px;
         letter-spacing: 0.05em;
@@ -173,6 +181,9 @@ const content = {
             border-right: 9px solid transparent;
             border-bottom: 16px solid $skyblue2;
             transform: rotate(-90deg);
+            @media (max-width:  #{$md4}) {
+                left: -78px;
+            }
         }
     }
 

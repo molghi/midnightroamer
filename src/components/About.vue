@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from "vue";
 import person1 from "@/assets/images/content/about-1.jpg";
 import person2 from "@/assets/images/content/about-2.jpg";
 import person3 from "@/assets/images/content/about-3.jpg";
@@ -9,7 +10,7 @@ const content = {
     texts: [
         "We’re a team of four passioned people.",
         "We’re ready to take the world by storm and let you find new travel opportunities.",
-        "Our everyday task is to make sure that you satisfied with the services and products that we provide.",
+        "Our everyday task is to make sure that you are satisfied with the services and products that we provide.",
         "With 💖 from Seattle, United States.",
     ],
     button: { link: "", title: "Learn more about us" },
@@ -20,6 +21,8 @@ const content = {
         { image: person4, name: "Josef Schwab", position: "CTO" },
     ],
 };
+
+const hoveredItem = ref(0);
 </script>
 
 <template>
@@ -38,7 +41,12 @@ const content = {
 
                 <!-- TEAM MEMBERS -->
                 <div class="about__items">
-                    <div v-for="(item, index) in content.team" :key="index" class="about__item">
+                    <div
+                        v-for="(item, index) in content.team"
+                        :key="index"
+                        :class="`about__item ${index === hoveredItem ? 'hovered' : ''}`"
+                        @mouseover="hoveredItem = index"
+                    >
                         <div class="about__item-pic">
                             <img :src="item.image" alt="team member image" />
                         </div>
@@ -234,6 +242,14 @@ const content = {
             font-size: 15px;
         }
     }
+}
+
+.hovered.about__item:after {
+    opacity: 0;
+}
+.hovered .about__item-info {
+    opacity: 1;
+    visibility: visible;
 }
 </style>
 
