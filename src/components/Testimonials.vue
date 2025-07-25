@@ -91,6 +91,7 @@ onUnmounted(() => window.removeEventListener("resize", updateScreen));
 
                 <!-- ACTIVATE SWIPER ON SMALL SCREENS -->
                 <swiper
+                    v-if="!isDesktop"
                     :modules="[Autoplay, Navigation]"
                     navigation
                     :loop="true"

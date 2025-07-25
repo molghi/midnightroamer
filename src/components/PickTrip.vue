@@ -161,10 +161,11 @@ const toggleTabTrigger = (tabIndex) => (activeTabTrigger.value = tabIndex);
                         >
                             <div class="pick__content-pic">
                                 <!-- RENDER SLIDES -->
-                                <!-- SWIPER :autoplay="{ delay: 3000, disableOnInteraction: false }" -->
+                                <!-- SWIPER -->
                                 <swiper
                                     ref="mySwiper"
                                     :modules="[Autoplay, Navigation]"
+                                    :autoplay="{ delay: 3000, disableOnInteraction: false }"
                                     :slides-per-view="1"
                                     :loop="true"
                                     :navigation="{
